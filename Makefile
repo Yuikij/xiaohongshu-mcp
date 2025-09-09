@@ -32,9 +32,16 @@ prod-down: ## 停止生产环境
 build: ## 构建镜像
 	docker build -t xiaohongshu-mcp:latest .
 
+build-proxy: ## 使用代理构建镜像
+	./build-with-proxy.sh
+
 rebuild: ## 重新构建并启动
 	docker compose down
 	docker compose up -d --build
+
+rebuild-proxy: ## 使用代理重新构建并启动
+	./build-with-proxy.sh
+	docker compose up -d
 
 restart: ## 重启服务
 	docker compose restart xiaohongshu-mcp

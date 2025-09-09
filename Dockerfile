@@ -4,11 +4,24 @@ FROM golang:1.23.5-alpine AS builder
 # 设置工作目录
 WORKDIR /app
 
+# 配置 Alpine 镜像源和代理（加速下载）
+ARG HTTP_PROXY
+ARG HTTPS_PROXY
+ENV http_proxy=${HTTP_PROXY}
+ENV https_proxy=${HTTPS_PROXY}
+
+# 使用国内镜像源加速 apk 下载
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories
+
 # 安装构建依赖
 RUN apk add --no-cache git ca-certificates tzdata
 
 # 复制 go.mod 和 go.sum
 COPY go.mod go.sum ./
+
+# 配置 Go 模块代理（加速 Go 包下载）
+ENV GOPROXY=https://goproxy.cn,direct
+ENV GOSUMDB=sum.golang.google.cn
 
 # 下载依赖
 RUN go mod download
