@@ -10,46 +10,46 @@ help: ## 显示帮助信息
 
 # 开发环境
 dev: ## 启动开发环境
-	docker-compose up -d --build
+	docker compose up -d --build
 
 dev-logs: ## 查看开发环境日志
-	docker-compose logs -f
+	docker compose logs -f
 
 dev-down: ## 停止开发环境
-	docker-compose down
+	docker compose down
 
 # 生产环境
 prod: ## 启动生产环境
-	docker-compose -f docker-compose.prod.yml up -d --build
+	docker compose -f docker-compose.prod.yml up -d --build
 
 prod-logs: ## 查看生产环境日志
-	docker-compose -f docker-compose.prod.yml logs -f
+	docker compose -f docker-compose.prod.yml logs -f
 
 prod-down: ## 停止生产环境
-	docker-compose -f docker-compose.prod.yml down
+	docker compose -f docker-compose.prod.yml down
 
 # 通用命令
 build: ## 构建镜像
 	docker build -t xiaohongshu-mcp:latest .
 
 rebuild: ## 重新构建并启动
-	docker-compose down
-	docker-compose up -d --build
+	docker compose down
+	docker compose up -d --build
 
 restart: ## 重启服务
-	docker-compose restart xiaohongshu-mcp
+	docker compose restart xiaohongshu-mcp
 
 status: ## 查看服务状态
-	docker-compose ps
+	docker compose ps
 
 health: ## 检查服务健康状态
 	curl -f http://localhost:18060/health || echo "Service is not healthy"
 
 logs: ## 查看日志（最近100行）
-	docker-compose logs --tail=100 -f xiaohongshu-mcp
+	docker compose logs --tail=100 -f xiaohongshu-mcp
 
 shell: ## 进入容器shell
-	docker-compose exec xiaohongshu-mcp bash
+	docker compose exec xiaohongshu-mcp bash
 
 # 清理命令
 clean: ## 清理停止的容器和无用镜像
@@ -57,21 +57,21 @@ clean: ## 清理停止的容器和无用镜像
 	docker image prune -f
 
 clean-all: ## 完全清理（包括卷和网络）
-	docker-compose down -v --remove-orphans
+	docker compose down -v --remove-orphans
 	docker system prune -af --volumes
 
 # 备份和恢复
 backup: ## 备份cookies数据
 	mkdir -p ./backup
-	docker cp $$(docker-compose ps -q xiaohongshu-mcp):/app/cookies ./backup/cookies-$$(date +%Y%m%d-%H%M%S)
+	docker cp $$(docker compose ps -q xiaohongshu-mcp):/app/cookies ./backup/cookies-$$(date +%Y%m%d-%H%M%S)
 
 restore: ## 恢复cookies数据（需要指定备份目录 BACKUP_DIR=xxx）
 	@if [ -z "$(BACKUP_DIR)" ]; then echo "请指定备份目录: make restore BACKUP_DIR=./backup/cookies-20231201-120000"; exit 1; fi
-	docker cp $(BACKUP_DIR) $$(docker-compose ps -q xiaohongshu-mcp):/app/cookies
+	docker cp $(BACKUP_DIR) $$(docker compose ps -q xiaohongshu-mcp):/app/cookies
 
 # 监控命令
 stats: ## 查看容器资源使用统计
-	docker stats $$(docker-compose ps -q)
+	docker stats $$(docker compose ps -q)
 
 inspect: ## 查看容器详细信息
 	docker inspect xiaohongshu-mcp
@@ -108,7 +108,7 @@ deploy-prod: ## 部署到生产环境
 	@echo "部署生产环境..."
 	sudo mkdir -p /opt/xiaohongshu-mcp/{cookies,data}
 	sudo chown -R 1000:1000 /opt/xiaohongshu-mcp
-	docker-compose -f docker-compose.prod.yml up -d --build
+	docker compose -f docker-compose.prod.yml up -d --build
 	@echo "生产环境部署完成！"
 
 # 显示有用信息
@@ -120,7 +120,7 @@ info: ## 显示服务信息
 	@echo "API文档: 参见 README.md"
 	@echo ""
 	@echo "=== 容器状态 ==="
-	@docker-compose ps 2>/dev/null || echo "容器未运行"
+	@docker compose ps 2>/dev/null || echo "容器未运行"
 	@echo ""
 	@echo "=== 有用命令 ==="
 	@echo "查看日志: make logs"

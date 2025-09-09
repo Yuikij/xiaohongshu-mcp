@@ -120,10 +120,10 @@ make clean
 - [ ] 确保有足够的磁盘空间 (至少 4GB)
 
 ### 部署后验证
-- [ ] 容器启动成功: `docker-compose ps`
+- [ ] 容器启动成功: `docker compose ps`
 - [ ] 健康检查通过: `curl http://localhost:18060/health`
 - [ ] MCP 端点可访问: `curl http://localhost:18060/mcp`
-- [ ] 日志无错误: `docker-compose logs`
+- [ ] 日志无错误: `docker compose logs`
 
 ### 生产环境额外检查
 - [ ] 数据目录权限正确: `/opt/xiaohongshu-mcp`
@@ -138,13 +138,13 @@ make clean
 #### 1. 容器启动失败
 ```bash
 # 检查日志
-docker-compose logs xiaohongshu-mcp
+docker compose logs xiaohongshu-mcp
 
 # 检查资源
 docker stats
 
 # 重新构建
-docker-compose up -d --build --force-recreate
+docker compose up -d --build --force-recreate
 ```
 
 #### 2. Chromium 相关错误
@@ -163,16 +163,16 @@ security_opt:
 sudo chown -R 1000:1000 /opt/xiaohongshu-mcp
 
 # 或在容器内
-docker-compose exec xiaohongshu-mcp chown -R app:app /app/
+docker compose exec xiaohongshu-mcp chown -R app:app /app/
 ```
 
 #### 4. 网络连接问题
 ```bash
 # 测试网络
-docker-compose exec xiaohongshu-mcp ping baidu.com
+docker compose exec xiaohongshu-mcp ping baidu.com
 
 # 检查代理设置
-docker-compose exec xiaohongshu-mcp env | grep -i proxy
+docker compose exec xiaohongshu-mcp env | grep -i proxy
 ```
 
 ## 🔐 安全考虑
@@ -212,7 +212,7 @@ logging:
 make stats
 
 # 容器健康状态
-docker-compose ps
+docker compose ps
 ```
 
 ### 备份策略

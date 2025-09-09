@@ -26,9 +26,9 @@ if errorlevel 1 (
     exit /b 1
 )
 
-docker-compose --version >nul 2>&1
+docker compose version >nul 2>&1
 if errorlevel 1 (
-    echo [ERROR] Docker Compose 未安装，请先安装 Docker Compose
+    echo [ERROR] Docker Compose 未安装或版本过旧，请安装新版本 Docker Compose
     exit /b 1
 )
 echo [SUCCESS] 系统依赖检查通过
@@ -51,13 +51,13 @@ if "%MODE%"=="prod" (
 :: 部署服务
 if "%MODE%"=="dev" (
     echo [INFO] 部署开发环境...
-    docker-compose down 2>nul
-    docker-compose up -d --build
+    docker compose down 2>nul
+    docker compose up -d --build
     echo [SUCCESS] 开发环境部署完成！
 ) else if "%MODE%"=="prod" (
     echo [INFO] 部署生产环境...
-    docker-compose -f docker-compose.prod.yml down 2>nul
-    docker-compose -f docker-compose.prod.yml up -d --build
+    docker compose -f docker-compose.prod.yml down 2>nul
+    docker compose -f docker-compose.prod.yml up -d --build
     echo [SUCCESS] 生产环境部署完成！
 ) else (
     echo [ERROR] 无效的部署模式: %MODE%
@@ -73,9 +73,9 @@ if errorlevel 1 (
     echo [WARNING] 服务可能还在启动中，请稍后检查
     echo [INFO] 使用以下命令查看日志:
     if "%MODE%"=="prod" (
-        echo   docker-compose -f docker-compose.prod.yml logs -f
+        echo   docker compose -f docker-compose.prod.yml logs -f
     ) else (
-        echo   docker-compose logs -f
+        echo   docker compose logs -f
     )
 ) else (
     echo [SUCCESS] 服务运行正常

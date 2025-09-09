@@ -7,22 +7,22 @@
 ### 1. 构建并启动服务
 
 ```bash
-# 使用 docker-compose 构建并启动
-docker-compose up -d --build
+# 使用 docker compose 构建并启动
+docker compose up -d --build
 
 # 或者分步执行
 docker build -t xiaohongshu-mcp .
-docker-compose up -d
+docker compose up -d
 ```
 
 ### 2. 查看服务状态
 
 ```bash
 # 查看容器状态
-docker-compose ps
+docker compose ps
 
 # 查看服务日志
-docker-compose logs -f xiaohongshu-mcp
+docker compose logs -f xiaohongshu-mcp
 
 # 健康检查
 curl http://localhost:18060/health
@@ -43,7 +43,7 @@ curl http://localhost:18060/health
 
 ```bash
 # 进入容器
-docker-compose exec xiaohongshu-mcp bash
+docker compose exec xiaohongshu-mcp bash
 
 # 运行登录命令（注意：这需要图形界面，建议在宿主机运行）
 go run cmd/login/main.go
@@ -128,7 +128,7 @@ logging:
 
 ```bash
 # 查看详细日志
-docker-compose logs xiaohongshu-mcp
+docker compose logs xiaohongshu-mcp
 
 # 检查资源使用
 docker stats
@@ -146,20 +146,20 @@ shm_size: 2gb
 
 ```bash
 # 检查卷权限
-docker-compose exec xiaohongshu-mcp ls -la /app/
+docker compose exec xiaohongshu-mcp ls -la /app/
 
 # 修复权限
-docker-compose exec xiaohongshu-mcp chown -R app:app /app/
+docker compose exec xiaohongshu-mcp chown -R app:app /app/
 ```
 
 #### 4. 网络连接问题
 
 ```bash
 # 测试容器网络
-docker-compose exec xiaohongshu-mcp ping baidu.com
+docker compose exec xiaohongshu-mcp ping baidu.com
 
 # 检查代理设置
-docker-compose exec xiaohongshu-mcp env | grep -i proxy
+docker compose exec xiaohongshu-mcp env | grep -i proxy
 ```
 
 ### 调试模式
@@ -168,29 +168,29 @@ docker-compose exec xiaohongshu-mcp env | grep -i proxy
 
 ```bash
 # 临时启动带调试的容器
-docker-compose run --rm xiaohongshu-mcp ./xiaohongshu-mcp -headless=false
+docker compose run --rm xiaohongshu-mcp ./xiaohongshu-mcp -headless=false
 ```
 
 ## 📚 相关命令
 
 ```bash
 # 重启服务
-docker-compose restart xiaohongshu-mcp
+docker compose restart xiaohongshu-mcp
 
 # 重新构建并启动
-docker-compose up -d --build
+docker compose up -d --build
 
 # 停止服务
-docker-compose down
+docker compose down
 
 # 完全清理（包括卷）
-docker-compose down -v
+docker compose down -v
 
 # 查看资源使用
-docker-compose exec xiaohongshu-mcp top
+docker compose exec xiaohongshu-mcp top
 
 # 进入容器 shell
-docker-compose exec xiaohongshu-mcp bash
+docker compose exec xiaohongshu-mcp bash
 ```
 
 ## 🔗 相关链接

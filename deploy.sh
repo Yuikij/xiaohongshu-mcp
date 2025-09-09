@@ -38,8 +38,8 @@ check_dependencies() {
         exit 1
     fi
     
-    if ! command -v docker-compose &> /dev/null; then
-        log_error "Docker Compose 未安装，请先安装 Docker Compose"
+    if ! docker compose version &> /dev/null; then
+        log_error "Docker Compose 未安装或版本过旧，请安装新版本 Docker Compose"
         exit 1
     fi
     
@@ -67,8 +67,8 @@ deploy_dev() {
     create_directories "dev"
     
     # 构建并启动服务
-    docker-compose down 2>/dev/null || true
-    docker-compose up -d --build
+    docker compose down 2>/dev/null || true
+    docker compose up -d --build
     
     log_success "开发环境部署完成！"
     log_info "服务地址: http://localhost:18060"
@@ -83,8 +83,8 @@ deploy_prod() {
     create_directories "prod"
     
     # 构建并启动服务
-    docker-compose -f docker-compose.prod.yml down 2>/dev/null || true
-    docker-compose -f docker-compose.prod.yml up -d --build
+    docker compose -f docker-compose.prod.yml down 2>/dev/null || true
+    docker compose -f docker-compose.prod.yml up -d --build
     
     log_success "生产环境部署完成！"
     log_info "服务地址: http://localhost:18060"
@@ -103,9 +103,9 @@ check_service() {
         log_warning "服务可能还在启动中，请稍后检查"
         log_info "使用以下命令查看日志:"
         if [ "$1" = "prod" ]; then
-            echo "  docker-compose -f docker-compose.prod.yml logs -f"
+            echo "  docker compose -f docker-compose.prod.yml logs -f"
         else
-            echo "  docker-compose logs -f"
+            echo "  docker compose logs -f"
         fi
     fi
 }
