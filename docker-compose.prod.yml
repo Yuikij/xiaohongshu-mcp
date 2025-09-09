@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  xiaohongshu-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: xiaohongshu-mcp:latest
+    container_name: xiaohongshu-mcp-prod
+    restart: unless-stopped
+    ports:
+      - "18060:18060"
+    environment:
+      - GIN_MODE=release
+      - TZ=Asia/Shanghai
+      # 生产环境代理配置（根据需要取消注释）
+      # - HTTP_PROXY=http://proxy.example.com:8080
+      # - HTTPS_PROXY=http://proxy.example.com:8080
+      # - NO_PROXY=localhost,127.0.0.1,*.local
+    volumes:
+      # 持久化数据卷
+      - xiaohongshu_cookies_prod:/app/cookies
+      - xiaohongshu_data_prod:/app/data
+      # 如果有自定义配置文件，可以挂载
+      # - ./config/prod:/app/config:ro
+      # 日志目录（可选）
+      # - ./logs:/app/logs
+    # 共享内存大小，Chrome 需要
+    shm_size: 2gb
+    # 安全选项
+    security_opt:
+      - seccomp:unconfined
+    # 资源限制
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+    # 网络配置
+    networks:
+      - xiaohongshu_network_prod
+    # 日志配置
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:18060/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # 可选：添加监控服务
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+  #     - prometheus_data:/prometheus
+  #   networks:
+  #     - xiaohongshu_network_prod
+
+  # 可选：添加日志聚合
+  # loki:
+  #   image: grafana/loki:latest
+  #   container_name: loki
+  #   ports:
+  #     - "3100:3100"
+  #   volumes:
+  #     - loki_data:/loki
+  #   networks:
+  #     - xiaohongshu_network_prod
+
+# 数据卷
+volumes:
+  xiaohongshu_cookies_prod:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/xiaohongshu-mcp/cookies
+  xiaohongshu_data_prod:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/xiaohongshu-mcp/data
+  # prometheus_data:
+  #   driver: local
+  # loki_data:
+  #   driver: local
+
+# 网络
+networks:
+  xiaohongshu_network_prod:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

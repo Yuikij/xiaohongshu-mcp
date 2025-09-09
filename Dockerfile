@@ -1,0 +1,74 @@
+# 使用官方 Go 镜像作为构建阶段
+FROM golang:1.23.5-alpine AS builder
+
+# 设置工作目录
+WORKDIR /app
+
+# 安装构建依赖
+RUN apk add --no-cache git ca-certificates tzdata
+
+# 复制 go.mod 和 go.sum
+COPY go.mod go.sum ./
+
+# 下载依赖
+RUN go mod download
+
+# 复制源代码
+COPY . .
+
+# 构建应用
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o xiaohongshu-mcp .
+
+# 使用 Browserless Chromium 镜像作为运行阶段
+FROM ghcr.io/browserless/chromium:latest
+
+# 设置工作目录
+WORKDIR /app
+
+# 切换到 root 用户进行安装
+USER root
+
+# 安装必要的系统包（browserless 镜像已包含大部分依赖）
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    tzdata \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# 设置时区为亚洲/上海
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# 创建应用用户（如果不存在）
+RUN useradd --create-home --shell /bin/bash --uid 1000 app 2>/dev/null || true
+
+# 从构建阶段复制二进制文件
+COPY --from=builder /app/xiaohongshu-mcp /app/xiaohongshu-mcp
+
+# 复制 entrypoint 脚本
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+
+# 创建必要的目录并设置权限
+RUN mkdir -p /app/cookies /app/data && \
+    chmod +x /app/docker-entrypoint.sh && \
+    chown -R 1000:1000 /app
+
+# 切换到应用用户
+USER 1000
+
+# 设置环境变量
+ENV GIN_MODE=release
+ENV DISPLAY=:99
+
+# 暴露端口
+EXPOSE 18060
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:18060/health || exit 1
+
+# 设置入口点
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
+
+# 启动命令
+CMD ["./xiaohongshu-mcp", "-headless=true"]
