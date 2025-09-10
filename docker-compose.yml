@@ -16,8 +16,8 @@ services:
       # - HTTP_PROXY=http://host.docker.internal:7890
       # - HTTPS_PROXY=http://host.docker.internal:7890
     volumes:
-      # 持久化 cookies 数据
-      - xiaohongshu_cookies:/app/cookies
+      # 持久化 cookies 数据（映射到容器的临时目录）
+      - xiaohongshu_cookies:/tmp
       # 持久化其他数据
       - xiaohongshu_data:/app/data
       # 如果需要自定义配置文件，可以挂载
@@ -37,12 +37,13 @@ services:
     #           capabilities: [gpu]
     networks:
       - xiaohongshu_network
-    # 日志配置
+    # 日志配置（开发环境）
     logging:
       driver: "json-file"
       options:
-        max-size: "10m"
-        max-file: "3"
+        max-size: "5m"        # 每个日志文件最大 5MB
+        max-file: "5"         # 最多保留 5 个文件
+        compress: "true"      # 压缩旧日志文件
 
 # 数据卷
 volumes:

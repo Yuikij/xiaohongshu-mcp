@@ -62,9 +62,10 @@ COPY --from=builder /app/xiaohongshu-mcp /app/xiaohongshu-mcp
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 
 # 创建必要的目录并设置权限
-RUN mkdir -p /app/cookies /app/data && \
+RUN mkdir -p /app/data /tmp && \
     chmod +x /app/docker-entrypoint.sh && \
-    chown -R 1000:1000 /app
+    chown -R 1000:1000 /app && \
+    chown -R 1000:1000 /tmp
 
 # 切换到应用用户
 USER 1000
@@ -76,8 +77,8 @@ ENV DISPLAY=:99
 # 暴露端口
 EXPOSE 18060
 
-# 健康检查
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+# 健康检查（降低频率减少日志）
+HEALTHCHECK --interval=2m --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:18060/health || exit 1
 
 # 设置入口点

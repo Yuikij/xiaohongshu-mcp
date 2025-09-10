@@ -55,6 +55,17 @@ health: ## 检查服务健康状态
 logs: ## 查看日志（最近100行）
 	docker compose logs --tail=100 -f xiaohongshu-mcp
 
+logs-clean: ## 查看过滤掉健康检查的日志
+	docker compose logs xiaohongshu-mcp | grep -v "GET.*health" | grep -v "200.*health" | tail -50
+
+logs-size: ## 查看日志文件大小
+	@echo "Docker 容器日志大小:"
+	@docker inspect xiaohongshu-mcp --format='{{.LogPath}}' | xargs ls -lh 2>/dev/null || echo "容器未运行"
+
+logs-rotate-test: ## 测试日志轮转配置
+	@echo "当前日志配置:"
+	@docker inspect xiaohongshu-mcp | grep -A 10 '"LogConfig"' || echo "容器未运行"
+
 shell: ## 进入容器shell
 	docker compose exec xiaohongshu-mcp bash
 
@@ -67,14 +78,20 @@ clean-all: ## 完全清理（包括卷和网络）
 	docker compose down -v --remove-orphans
 	docker system prune -af --volumes
 
+clean-logs: ## 清理应用日志
+	chmod +x scripts/log-cleanup.sh && ./scripts/log-cleanup.sh
+
+clean-logs-force: ## 强制清理应用日志
+	chmod +x scripts/log-cleanup.sh && ./scripts/log-cleanup.sh --force
+
 # 备份和恢复
 backup: ## 备份cookies数据
 	mkdir -p ./backup
-	docker cp $$(docker compose ps -q xiaohongshu-mcp):/app/cookies ./backup/cookies-$$(date +%Y%m%d-%H%M%S)
+	docker cp $$(docker compose ps -q xiaohongshu-mcp):/tmp/cookies.json ./backup/cookies-$$(date +%Y%m%d-%H%M%S).json
 
-restore: ## 恢复cookies数据（需要指定备份目录 BACKUP_DIR=xxx）
-	@if [ -z "$(BACKUP_DIR)" ]; then echo "请指定备份目录: make restore BACKUP_DIR=./backup/cookies-20231201-120000"; exit 1; fi
-	docker cp $(BACKUP_DIR) $$(docker compose ps -q xiaohongshu-mcp):/app/cookies
+restore: ## 恢复cookies数据（需要指定备份文件 BACKUP_FILE=xxx）
+	@if [ -z "$(BACKUP_FILE)" ]; then echo "请指定备份文件: make restore BACKUP_FILE=./backup/cookies-20231201-120000.json"; exit 1; fi
+	docker cp $(BACKUP_FILE) $$(docker compose ps -q xiaohongshu-mcp):/tmp/cookies.json
 
 # 监控命令
 stats: ## 查看容器资源使用统计

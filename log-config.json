@@ -1,0 +1,25 @@
+{
+  "level": "info",
+  "format": "json",
+  "output": "stdout",
+  "rotation": {
+    "enabled": true,
+    "max_size": "100MB",
+    "max_age": "7d",
+    "max_backups": 5,
+    "compress": true
+  },
+  "filters": {
+    "health_check": {
+      "enabled": true,
+      "level": "debug",
+      "comment": "降低健康检查日志级别，减少噪音"
+    },
+    "gin_access": {
+      "enabled": true,
+      "level": "warn",
+      "paths": ["/health"],
+      "comment": "健康检查请求只在警告级别记录"
+    }
+  }
+}

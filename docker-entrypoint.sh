@@ -5,7 +5,9 @@
 set -e
 
 # 创建必要的目录
-mkdir -p /app/cookies /app/data
+mkdir -p /app/data /tmp
+# 确保临时目录权限正确（cookies 存储在这里）
+chmod 755 /tmp
 
 # browserless 镜像通常已经配置了显示环境
 # 只在必要时启动 Xvfb
