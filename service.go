@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/mattn/go-runewidth"
 	"github.com/xpzouying/xiaohongshu-mcp/browser"
 	"github.com/xpzouying/xiaohongshu-mcp/configs"
 	"github.com/xpzouying/xiaohongshu-mcp/pkg/downloader"
@@ -70,6 +72,13 @@ func (s *XiaohongshuService) CheckLoginStatus(ctx context.Context) (*LoginStatus
 
 // PublishContent 发布内容
 func (s *XiaohongshuService) PublishContent(ctx context.Context, req *PublishRequest) (*PublishResponse, error) {
+	// 验证标题长度
+	// 小红书限制：最大40个单位长度
+	// 中文/日文/韩文占2个单位，英文/数字占1个单位
+	if titleWidth := runewidth.StringWidth(req.Title); titleWidth > 40 {
+		return nil, fmt.Errorf("标题长度超过限制")
+	}
+
 	// 处理图片：下载URL图片或使用本地路径
 	imagePaths, err := s.processImages(req.Images)
 	if err != nil {
@@ -188,6 +197,33 @@ func (s *XiaohongshuService) GetFeedDetail(ctx context.Context, feedID, xsecToke
 	response := &FeedDetailResponse{
 		FeedID: feedID,
 		Data:   result,
+	}
+
+	return response, nil
+}
+
+// PostCommentToFeed 发表评论到Feed
+func (s *XiaohongshuService) PostCommentToFeed(ctx context.Context, feedID, xsecToken, content string) (*PostCommentResponse, error) {
+	// 使用非无头模式以便查看操作过程
+	b := browser.NewBrowser(false)
+	defer b.Close()
+
+	page := b.NewPage()
+	defer page.Close()
+
+	// 创建 Feed 评论 action
+	action := xiaohongshu.NewCommentFeedAction(page)
+
+	// 发表评论
+	err := action.PostComment(ctx, feedID, xsecToken, content)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostCommentResponse{
+		FeedID:  feedID,
+		Success: true,
+		Message: "评论发表成功",
 	}
 
 	return response, nil
