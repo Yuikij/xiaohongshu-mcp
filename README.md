@@ -159,9 +159,7 @@ go env -w  GOPROXY=https://goproxy.io,direct
 
 </details>
 
-Windows 问题：
-
-可以参考这里 https://github.com/xpzouying/xiaohongshu-mcp/issues/56
+Windows 遇到问题首先看这里：[Windows 安装指南](./docs/windows_guide.md)
 
 ### 1.2. 登录
 
@@ -438,17 +436,41 @@ npx @modelcontextprotocol/inspector
 
 <img src="./assets/publish_result.jpeg" alt="xiaohongshu-mcp 发布结果" width="400">
 
+## ShowCase
+
+直接参考大家的使用案例：[ShowCase](./examples/README.md)
+
+1. [n8n 完整的教程](./examples/n8n/README.md)
+
 ## 小红书 MCP 互助群
 
-因为项目刚刚启动，会有很多问题，拉一个群大家一起讨论问题，一起为开源项目做贡献。扫我的微信二维码加群讨论技术。
+因为项目刚刚启动，会有很多问题，拉一个群大家一起讨论问题，一起为开源项目做贡献。~~扫我的微信二维码加群讨论技术~~。
 
-**申请时务必添加备注。**
+由于添加微信的人太多了，导致微信把我账号封禁了，原因是：处于不安全的网络中。（不确定是不是因为人太多，可能触发了微信的电信诈骗的安全检测，做了：1.实名认证；2.绑定银行卡；3.人工申诉；都没有用。）
 
-直接扫码进群
+换到飞书群，直接扫码进群
 
-![image](https://github.com/user-attachments/assets/5893ef1e-4466-46be-af59-4e8d505c9759)
+<details>
+<summary>【飞书一群】已满</summary>
 
+![1757903591605_副本](https://github.com/user-attachments/assets/63ad53b9-6e5d-4117-ba61-90a223494501)
 
-个人微信由于申请人太多，导致微信现在把我封禁掉 7d，直到 9月22日 才能添加我个人微信。
+</details>
 
-![WechatIMG111](https://github.com/user-attachments/assets/ae535953-6c8b-4c12-91b6-ac1572ce9032)
+<!-- 两列排布：飞书二群 | 微信群 -->
+
+| 【飞书二群】：扫码进入                                                                                                    | 【微信群】：扫码进入                                                                                                       |
+| ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/user-attachments/assets/ca1f5d6e-b1bf-4c15-9975-ff75f339ec9b" alt="qrcode_2qun" width="300"> | <img src="https://github.com/user-attachments/assets/34c51c3a-d5fd-4086-9d37-a5a5284264c9" alt="WechatIMG119" width="300"> |
+
+## 🙏 致谢贡献者
+
+感谢所有为本项目做出贡献的朋友！
+
+<a href="https://github.com/xpzouying/xiaohongshu-mcp/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=xpzouying/xiaohongshu-mcp" />
+</a>
+
+### ✨ 特别感谢
+
+- [@wanpengxie](https://github.com/wanpengxie)
