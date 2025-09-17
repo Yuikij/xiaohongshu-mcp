@@ -13,8 +13,8 @@ RestartSec=5
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=xiaohongshu-mcp
-Environment=HTTP_PROXY=http://192.168.2.5:7890
-Environment=HTTPS_PROXY=http://192.168.2.5:7890
+Environment=HTTP_PROXY=http://172.23.104.184:7890
+Environment=HTTPS_PROXY=http://172.23.104.184:7890
 # 环境变量
 Environment=GIN_MODE=release
 
