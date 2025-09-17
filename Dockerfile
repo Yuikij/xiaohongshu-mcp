@@ -78,8 +78,8 @@ ENV DISPLAY=:99
 EXPOSE 18060
 
 # 健康检查（降低频率减少日志）
-HEALTHCHECK --interval=2m --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost:18060/health || exit 1
+# HEALTHCHECK --interval=2m --timeout=10s --start-period=60s --retries=3 \
+#     CMD curl -f http://localhost:18060/health || exit 1
 
 # 设置入口点
 ENTRYPOINT ["/app/docker-entrypoint.sh"]

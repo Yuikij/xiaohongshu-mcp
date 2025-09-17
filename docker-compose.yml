@@ -2,9 +2,10 @@ version: '3.8'
 
 services:
   xiaohongshu-mcp:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: xiaohongshu-mcp:latest
     container_name: xiaohongshu-mcp
     restart: unless-stopped
     ports:
@@ -13,13 +14,13 @@ services:
       - GIN_MODE=release
       - TZ=Asia/Shanghai
       # 如果需要代理，可以取消注释下面的行
-      # - HTTP_PROXY=http://host.docker.internal:7890
-      # - HTTPS_PROXY=http://host.docker.internal:7890
+      - HTTP_PROXY=http://172.23.104.184:7890
+      - HTTPS_PROXY=http://172.23.104.184:7890
     volumes:
       # 持久化 cookies 数据（映射到容器的临时目录）
-      - xiaohongshu_cookies:/tmp
+      - ./xiaohongshu_cookies:/tmp
       # 持久化其他数据
-      - xiaohongshu_data:/app/data
+      - ./xiaohongshu_data:/app/data
       # 如果需要自定义配置文件，可以挂载
       # - ./config:/app/config:ro
     # 共享内存大小，Chrome 需要
@@ -35,8 +36,8 @@ services:
     #         - driver: nvidia
     #           count: 1
     #           capabilities: [gpu]
-    networks:
-      - xiaohongshu_network
+    # networks:
+    #   - xiaohongshu_network
     # 日志配置（开发环境）
     logging:
       driver: "json-file"
@@ -46,13 +47,13 @@ services:
         compress: "true"      # 压缩旧日志文件
 
 # 数据卷
-volumes:
-  xiaohongshu_cookies:
-    driver: local
-  xiaohongshu_data:
-    driver: local
+# volumes:
+#   xiaohongshu_cookies:
+#     driver: local
+#   xiaohongshu_data:
+#     driver: local
 
 # 网络
-networks:
-  xiaohongshu_network:
-    driver: bridge
+# networks:
+#   xiaohongshu_network:
+#     driver: bridge
