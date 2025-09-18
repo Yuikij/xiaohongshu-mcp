@@ -1,6 +1,6 @@
 # xiaohongshu-mcp
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 MCP for 小红书/xiaohongshu.com。
@@ -138,10 +138,41 @@ https://github.com/user-attachments/assets/cc385b6c-422c-489b-a5fc-63e92c695b80
 
 ## 1. 使用教程
 
-### 1.1. 安装
+### 1.1. 快速开始（推荐）
+
+**方式一：下载预编译二进制文件**
+
+直接从 [GitHub Releases](https://github.com/xpzouying/xiaohongshu-mcp/releases) 下载对应平台的二进制文件：
+
+**主程序（MCP 服务）：**
+- **macOS Apple Silicon**: `xiaohongshu-mcp-darwin-arm64`
+- **macOS Intel**: `xiaohongshu-mcp-darwin-amd64`
+- **Windows x64**: `xiaohongshu-mcp-windows-amd64.exe`
+- **Linux x64**: `xiaohongshu-mcp-linux-amd64`
+
+**登录工具：**
+- **macOS Apple Silicon**: `xiaohongshu-login-darwin-arm64`
+- **macOS Intel**: `xiaohongshu-login-darwin-amd64`
+- **Windows x64**: `xiaohongshu-login-windows-amd64.exe`
+- **Linux x64**: `xiaohongshu-login-linux-amd64`
+
+使用步骤：
+```bash
+# 1. 首先运行登录工具
+chmod +x xiaohongshu-login-darwin-arm64
+./xiaohongshu-login-darwin-arm64
+
+# 2. 然后启动 MCP 服务
+chmod +x xiaohongshu-mcp-darwin-arm64
+./xiaohongshu-mcp-darwin-arm64
+```
+
+**⚠️ 重要提示**：首次运行时会自动下载无头浏览器（约 150MB），请确保网络连接正常。后续运行无需重复下载。
+
+**方式二：源码编译**
 
 <details>
-<summary>安装配置详情</summary>
+<summary>源码编译安装详情</summary>
 
 依赖 Golang 环境，安装方法请参考 [Golang 官方文档](https://go.dev/doc/install)。
 
@@ -168,8 +199,13 @@ Windows 遇到问题首先看这里：[Windows 安装指南](./docs/windows_guid
 
 第一次需要手动登录，需要保存小红书的登录状态。
 
-运行
+**使用二进制文件**：
+```bash
+# 运行对应平台的登录工具
+./xiaohongshu-login-darwin-arm64
+```
 
+**使用源码**：
 ```bash
 go run cmd/login/main.go
 ```
@@ -178,8 +214,17 @@ go run cmd/login/main.go
 
 启动 xiaohongshu-mcp 服务。
 
+**使用二进制文件**：
 ```bash
+# 默认：无头模式，没有浏览器界面
+./xiaohongshu-mcp-darwin-arm64
 
+# 非无头模式，有浏览器界面
+./xiaohongshu-mcp-darwin-arm64 -headless=false
+```
+
+**使用源码**：
+```bash
 # 默认：无头模式，没有浏览器界面
 go run .
 
@@ -437,15 +482,22 @@ npx @modelcontextprotocol/inspector
 
 **发布结果：**
 
-<img src="./assets/publish_result.jpeg" alt="xiaohongshu-mcp 发布结果" width="400">
+<img src="./assets/publish_result.jpeg" alt="xiaohongshu-mcp 发布结果" width="300">
 
-## ShowCase
+## 3. 🌟 实战案例展示 (Community Showcases)
 
-直接参考大家的使用案例：[ShowCase](./examples/README.md)
+> 💡 **强烈推荐查看**：这些都是社区贡献者的真实使用案例，包含详细的配置步骤和实战经验！
 
-1. [n8n 完整的教程](./examples/n8n/README.md)
+### 📚 完整教程列表
 
-## 小红书 MCP 互助群
+1. **[n8n 完整集成教程](./examples/n8n/README.md)** - 工作流自动化平台集成
+2. **[Cherry Studio 完整配置教程](./examples/cherrystudio/README.md)** - AI 客户端完美接入
+
+> 🎯 **提示**: 点击上方链接查看详细的图文教程，快速上手各种集成方案！
+>
+> 📢 **欢迎贡献**: 如果你有新的集成案例，欢迎提交 PR 分享给社区！
+
+## 4. 小红书 MCP 互助群
 
 因为项目刚刚启动，会有很多问题，拉一个群大家一起讨论问题，一起为开源项目做贡献。~~扫我的微信二维码加群讨论技术~~。
 
@@ -467,11 +519,20 @@ npx @modelcontextprotocol/inspector
   
 </details>
 
+
+<details>
+  <summary>【微信二群】已满 </summary>
+
+  <img src="https://github.com/user-attachments/assets/d2c0340c-33e7-4d19-a9f5-cd581b63bd56" alt="WechatIMG119" width="300">
+  
+</details>
+
 <!-- 两列排布：飞书二群 | 微信群 -->
 
-| 【飞书二群】：扫码进入                                                                                                    | 【微信群2群】：扫码进入                                                                                                       |
+| 【飞书二群】：扫码进入                                                                                                    | 【微信群3群】：扫码进入                                                                                                       |
 | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/user-attachments/assets/ca1f5d6e-b1bf-4c15-9975-ff75f339ec9b" alt="qrcode_2qun" width="300"> | <img src="https://github.com/user-attachments/assets/d2c0340c-33e7-4d19-a9f5-cd581b63bd56" alt="WechatIMG119" width="300"> |
+| <img src="https://github.com/user-attachments/assets/ca1f5d6e-b1bf-4c15-9975-ff75f339ec9b" alt="qrcode_2qun" width="300"> | <img src="https://github.com/user-attachments/assets/7665056d-be56-4bf3-a9f3-77f967079929" alt="WechatIMG119" width="300"> |
+
 
 
 
@@ -490,6 +551,7 @@ npx @modelcontextprotocol/inspector
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/laryzhong"><img src="https://avatars.githubusercontent.com/u/47939471?v=4?s=100" width="100px;" alt="Zhongpeng"/><br /><sub><b>Zhongpeng</b></sub></a><br /><a href="https://github.com/xpzouying/xiaohongshu-mcp/commits?author=laryzhong" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/DTDucas"><img src="https://avatars.githubusercontent.com/u/105262836?v=4?s=100" width="100px;" alt="Duong Tran"/><br /><sub><b>Duong Tran</b></sub></a><br /><a href="https://github.com/xpzouying/xiaohongshu-mcp/commits?author=DTDucas" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Angiin"><img src="https://avatars.githubusercontent.com/u/17389304?v=4?s=100" width="100px;" alt="Angiin"/><br /><sub><b>Angiin</b></sub></a><br /><a href="https://github.com/xpzouying/xiaohongshu-mcp/commits?author=Angiin" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/muhenan"><img src="https://avatars.githubusercontent.com/u/43441941?v=4?s=100" width="100px;" alt="Henan Mu"/><br /><sub><b>Henan Mu</b></sub></a><br /><a href="https://github.com/xpzouying/xiaohongshu-mcp/commits?author=muhenan" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
